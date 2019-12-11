@@ -1,4 +1,0 @@
-let calculadora = new CalcController();
-
-
-

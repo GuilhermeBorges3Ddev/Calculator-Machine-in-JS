@@ -2,9 +2,9 @@ class CalcController {
 
     constructor(){
 
-        //Notação com "_" em atributos refere-se à atributos privados!
+        //Notation with "_" in attributes refers private attributes
         this._displayCalc = "0";
-        this._dataAtual;
+        this._currentDate;
 
     }
 
@@ -12,16 +12,16 @@ class CalcController {
         return this._displayCalc;
     }
 
-    set displayCalc(valor){
-        this.displayCalc = valor;
+    set displayCalc(value){
+        this.displayCalc = value;
     }
 
-    get dataAtual(){
-        return this._dataAtual;
+    get currentDate(){
+        return this._currentDate;
     }
 
-    set dataAtual(valor){
-        this.dataAtual = valor;
+    set currentDate(value){
+        this.currentDate = value;
     }
 
 }
