@@ -3,27 +3,25 @@ class CalcController {
     constructor(){
 
         //Notation with "_" in attributes refers private attributes
-        this._displayCalc = "0";
         this._currentDate;
+        this._displayCalcEl = document.querySelector("#display");
+        this._dataEl = document.querySelector("#data");
+        this._timeEl = document.querySelector("#hora");
         this.initialize();
     }
 
     initialize(){
-       let displayCalcEl = document.querySelector("#display");
-       let dataEl = document.querySelector("#data");
-       let timeEl = document.querySelector("#hora");
-
-       displayCalcEl.innerHTML = "081194";
-       dataEl.innerHTML = "11/12/2019";
-       timeEl.innerHTML = "23:30"
+       this._displayCalcEl.innerHTML = "081194";
+       this._dataEl.innerHTML = "11/12/2019";
+       this._timeEl.innerHTML = "23:30"
     }
 
     get displayCalc(){
-        return this._displayCalc;
+        return this._displayCalcEl.innerHTML;
     }
 
     set displayCalc(value){
-        this.displayCalc = value;
+        this.displayCalcEl = value;
     }
 
     get currentDate(){
