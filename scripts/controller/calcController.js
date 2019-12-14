@@ -2,26 +2,34 @@ class CalcController {
 
     constructor(){
 
-        //Notação com "_" em atributos refere-se à atributos privados!
-        this._displayCalc = "0";
-        this._dataAtual;
+        //Notation with "_" in attributes refers private attributes, works only inside the class
+        this._currentDate;
+        this._displayCalcEl = document.querySelector("#display");
+        this._dataEl = document.querySelector("#data");
+        this._timeEl = document.querySelector("#hora");
+        this.initialize();
+    }
 
+    initialize(){
+       this._displayCalcEl.innerHTML = "081194";
+       this._dataEl.innerHTML = "11/12/2019";
+       this._timeEl.innerHTML = "23:30"
     }
 
     get displayCalc(){
-        return this._displayCalc;
+        return this._displayCalcEl.innerHTML;
     }
 
-    set displayCalc(valor){
-        this.displayCalc = valor;
+    set displayCalc(value){
+        this._displayCalcEl = value;
     }
 
-    get dataAtual(){
-        return this._dataAtual;
+    get currentDate(){
+        return this._currentDate;
     }
 
-    set dataAtual(valor){
-        this.dataAtual = valor;
+    set currentDate(value){
+        this._currentDate = value;
     }
 
 }
