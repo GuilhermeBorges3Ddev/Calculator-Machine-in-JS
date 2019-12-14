@@ -2,7 +2,7 @@ class CalcController {
 
     constructor(){
 
-        //Notation with "_" in attributes refers private attributes
+        //Notation with "_" in attributes refers private attributes, works only inside the class
         this._currentDate;
         this._displayCalcEl = document.querySelector("#display");
         this._dataEl = document.querySelector("#data");
@@ -21,7 +21,7 @@ class CalcController {
     }
 
     set displayCalc(value){
-        this.displayCalcEl = value;
+        this._displayCalcEl = value;
     }
 
     get currentDate(){
@@ -29,7 +29,7 @@ class CalcController {
     }
 
     set currentDate(value){
-        this.currentDate = value;
+        this._currentDate = value;
     }
 
 }
