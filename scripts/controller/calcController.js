@@ -3,6 +3,7 @@ class CalcController {
     constructor(){
 
         //Notation with "_" in attributes refers private attributes, works only inside the class
+        this._locale = 'pt-BR';
         this._currentDate;
         this._displayCalcEl = document.querySelector("#display");
         this._dateEl = document.querySelector("#data");
@@ -11,9 +12,21 @@ class CalcController {
     }
 
     initialize(){
-       this._displayCalcEl.innerHTML = "000000";
-       this._dateEl.innerHTML = "13/12/2019";
-       this._timeEl.innerHTML = "23:59"
+       this.setDisplayDateTime();
+       //For each 1 second, or 1000 milliseconds, the block of code inside setInterval() is executed 
+       setInterval(()=> {
+            this.setDisplayDateTime();    
+       }, 1000);//Another interesting function is setTimeout(), who is executed only one time after X milliseconds
+    }
+
+    //Function created to be used into initialize() method
+    setDisplayDateTime(){
+        this.displayDate = this.currentDate.toLocaleDateString(this.locale,{
+            day: '2 digit',
+            month: 'long',
+            year: 'numeric'
+        });
+        this.displayTime = this.currentDate.toLocaleTimeString(this.locale);
     }
 
     get displayCalc(){
