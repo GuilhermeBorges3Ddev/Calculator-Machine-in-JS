@@ -19,10 +19,15 @@ class CalcController {
        }, 1000);//Another interesting function is setTimeout(), who is executed only one time after X milliseconds
     }
 
+    //Method to add event click in all buttons, including texts
+    initButtonsEvents(){
+        let buttons = document.querySelectorAll("#buttons > g, #parts > g");
+    }
+
     //Function created to be used into initialize() method
     setDisplayDateTime(){
         this.displayDate = this.currentDate.toLocaleDateString(this.locale,{
-            day: '2 digit',
+            day: '2-digit',
             month: 'long',
             year: 'numeric'
         });
