@@ -20,15 +20,30 @@ class CalcController {
        }, 1000);//Another interesting function is setTimeout(), who is executed only one time after X milliseconds
     }
 
+    //Replacing the native method addEventListener() to another method what stand more than one event per turn
+    addEventListernerAll(element, events, fn){
+        events.split(' ').forEach(event => {
+            element.addEventListener(event, fn, false);
+        });
+    }
+
     //Method to add event click in all buttons, including texts
     initButtonsEvents(){
         let buttons = document.querySelectorAll("#buttons > g, #parts > g");
         
         buttons.forEach((btn, index) => {
-            //Put listener in all button to the event click
-            btn.addEventListener('click', e => {
+            /*
+            Put listener in all button to the event click, but addEventListener() stands only one event per turn:
+                btn.addEventListener('click', e => {
+                    console.log(btn.className.baseVal.replace("btn-", ""));
+                });
+            */
+           this.addEventListernerAll(btn, 'click drag', e => {
                 console.log(btn.className.baseVal.replace("btn-", ""));
-            });
+           });
+           this.addEventListernerAll(btn, 'mouseover mouseup mousedown', e => {
+                btn.style.cursor = "pointer";
+           });
         })
     }
 
