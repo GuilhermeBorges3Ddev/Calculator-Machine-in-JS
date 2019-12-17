@@ -5,6 +5,7 @@ class CalcController {
         //Notation with "_" in attributes refers private attributes, works only inside the class
         this._locale = 'pt-BR';
         this._currentDate;
+        this._operation = []; //These array saves every operation digited by the the calculator user
         this._displayCalcEl = document.querySelector("#display");
         this._dateEl = document.querySelector("#data");
         this._timeEl = document.querySelector("#hora");
@@ -27,6 +28,31 @@ class CalcController {
         });
     }
 
+    //Method created to the "ac" operation, what is the same of clear all done operations
+    clearAll(){
+
+    }
+
+    //Method created to the "ce" operation, what is the same of clear the last operation
+    clearEntry(){
+
+    }
+
+    //Switch case to be used into "AC", "CE", "%", "/", "*", "-", "+", "." and "=" buttons
+    execBtn(value){
+        switch (value) {
+            case 'ac':
+                this.clearAll();
+            break;
+            case 'ce':
+                this.clearEntry();
+            break;
+            case '=':
+
+            break;
+        }
+    }
+
     //Method to add event click in all buttons, including texts
     initButtonsEvents(){
         let buttons = document.querySelectorAll("#buttons > g, #parts > g");
@@ -39,7 +65,8 @@ class CalcController {
                 });
             */
            this.addEventListernerAll(btn, 'click drag', e => {
-                console.log(btn.className.baseVal.replace("btn-", ""));
+                let textBtn = btn.className.baseVal.replace("btn-", "");
+                this.execBtn(textBtn);
            });
            this.addEventListernerAll(btn, 'mouseover mouseup mousedown', e => {
                 btn.style.cursor = "pointer";
