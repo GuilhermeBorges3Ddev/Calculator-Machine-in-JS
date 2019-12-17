@@ -30,25 +30,76 @@ class CalcController {
 
     //Method created to the "ac" operation, what is the same of clear all done operations
     clearAll(){
-
+        this._operation = [];
     }
 
     //Method created to the "ce" operation, what is the same of clear the last operation
-    clearEntry(){
+    cancelEntry(){
+        this._operation.pop();
+    }
 
+    //These method combines a number or an operator
+    addOperation(value){
+        this._operation.push(value);
+        console.log(this._operation)
+    }
+
+    //Method created to threat the case what user send a illegal operation
+    setError(){
+        this.displayCalc = "ERROR"
     }
 
     //Switch case to be used into "AC", "CE", "%", "/", "*", "-", "+", "." and "=" buttons
     execBtn(value){
         switch (value) {
+
             case 'ac':
                 this.clearAll();
             break;
+            
             case 'ce':
-                this.clearEntry();
+                this.cancelEntry();
             break;
-            case '=':
+            
+            case 'soma':
 
+            break;
+            
+            case 'subtracao':
+
+            break;
+            
+            case 'divisao':
+
+            break;
+            
+            case 'multiplicacao':
+
+            break;
+            
+            case 'porcento':
+
+            break;
+            
+            case 'igual':
+
+            break;
+            
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                this.addOperation(parseInt(value));
+            break;
+            
+            default:
+                this.setError();
             break;
         }
     }
