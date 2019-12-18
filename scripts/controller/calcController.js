@@ -53,6 +53,33 @@ class CalcController {
         return (['+','-','*','/','%'].indexOf(value) > -1);
     }
 
+    //Simple method to push into our array of numbers and operations
+    pushOperation(value){
+        this._operation.push(value);
+        if(this._operation.length > 3){
+            this.calc();
+        }
+    }
+
+    //Method to validate when calculate an expression or not
+    calc(){
+        let last = this._operation.pop();
+        let result = eval(this._operation.join(""));
+        this._operation = [result, last];
+    }
+
+    //Method to change the last number in the calculator display when it suffers a change
+    setLastNumberToDisplay(){
+        let lastNumber;
+        for(let i = this._operation.length - 1; i >= 0; i--){
+            if(this.isOperator(this._operation[i])){
+                lastNumber = this._operation[i];
+                break;
+            }
+        }
+        this.displayCalc = lastNumber;
+    }
+
     //These method combines a number or an operator
     addOperation(value){
         console.log('A',value,isNaN(this.getLastOperation()))
@@ -62,12 +89,18 @@ class CalcController {
             } else if(isNaN(value)) {//For dot and equal
                 
             } else {//Is a number, and its the first iteration into the array
-                this._operation.push(value);
+                this.pushOperation(value);
+                this.setLastNumberToDisplay();
             }
         } else {
-            let newValue = this.getLastOperation().toString() + value.toString();
-            this.setLastOperation(parseInt(newValue));
-            console.log(newValue)
+            if(this.isOperator(value)){//If the last thing digited is a number following an operator
+                this.pushOperation(value);
+            }else{
+                let newValue = this.getLastOperation().toString() + value.toString();
+                this.setLastOperation(parseInt(newValue));
+                //Updating the display when a complete number are or the last digit are modifyed 
+                this.setLastNumberToDisplay();
+            }
         }
     }
 
