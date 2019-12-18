@@ -19,6 +19,7 @@ class CalcController {
        setInterval(()=> {
             this.setDisplayDateTime();    
        }, 1000);//Another interesting function is setTimeout(), who is executed only one time after X milliseconds
+       this.setLastNumberToDisplay();
     }
 
     //Replacing the native method addEventListener() to another method what stand more than one event per turn
@@ -31,6 +32,7 @@ class CalcController {
     //Method created to the "ac" operation, what is the same of clear all done operations
     clearAll(){
         this._operation = [];
+        this.setLastNumberToDisplay();
     }
 
     //Method created to the "ce" operation, what is the same of clear the last operation
@@ -63,9 +65,21 @@ class CalcController {
 
     //Method to validate when calculate an expression or not
     calc(){
-        let last = this._operation.pop();
+        let last = '';
+        if(this._operation.length > 3){
+            last = this._operation.pop();
+        }
         let result = eval(this._operation.join(""));
-        this._operation = [result, last];
+        if(last == '%'){
+            result /= 100;
+            this._operation = [result];
+        }else{
+            this._operation = [result];
+            if(last){
+                this._operation.push(last);
+            }
+        }
+        this.setLastNumberToDisplay();
     }
 
     //Method to change the last number in the calculator display when it suffers a change
@@ -76,6 +90,9 @@ class CalcController {
                 lastNumber = this._operation[i];
                 break;
             }
+        }
+        if(!lastNumber){
+            lastNumber = 0;
         }
         this.displayCalc = lastNumber;
     }
@@ -142,7 +159,7 @@ class CalcController {
             break;
             
             case 'igual':
-                
+                this.calc();
             break;
 
             case 'ponto':
