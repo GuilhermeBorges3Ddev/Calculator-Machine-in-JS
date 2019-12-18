@@ -55,17 +55,18 @@ class CalcController {
 
     //These method combines a number or an operator
     addOperation(value){
+        console.log('A',value,isNaN(this.getLastOperation()))
         if(isNaN(this.getLastOperation())){
             if(this.isOperator(value)) {//If the last digit is another operator, so replace
-                this._setLastOperation(value);
+                this.setLastOperation(value);
             } else if(isNaN(value)) {//For dot and equal
-                console.log(value);
+                
             } else {//Is a number, and its the first iteration into the array
                 this._operation.push(value);
             }
         } else {
             let newValue = this.getLastOperation().toString() + value.toString();
-            this._setLastOperation(parseInt(newValue));
+            this.setLastOperation(parseInt(newValue));
         }
     }
 
