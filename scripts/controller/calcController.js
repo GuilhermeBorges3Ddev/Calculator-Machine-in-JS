@@ -67,6 +67,7 @@ class CalcController {
         } else {
             let newValue = this.getLastOperation().toString() + value.toString();
             this.setLastOperation(parseInt(newValue));
+            console.log(newValue)
         }
     }
 
@@ -92,7 +93,7 @@ class CalcController {
             break;
             
             case 'subtracao':
-                this.addOperation('+');
+                this.addOperation('-');
             break;
             
             case 'divisao':
