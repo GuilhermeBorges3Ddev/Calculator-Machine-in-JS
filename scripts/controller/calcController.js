@@ -3,6 +3,9 @@ class CalcController {
     constructor(){
 
         //Notation with "_" in attributes refers private attributes, works only inside the class
+        this._lastOperator = '';
+        this._lastNumber = '';
+
         this._locale = 'pt-BR';
         this._currentDate;
         this._operation = []; //These array saves every operation digited by the the calculator user
@@ -63,17 +66,34 @@ class CalcController {
         }
     }
 
+    //Simple get result of an operation
+    getResult(){
+        return eval(this._operation.join(""));
+    }
+
     //Method to validate when calculate an expression or not
-    calc(){
+    calc(){ 
         let last = '';
+        this._lastOperator = this.getLastItem(true);
+
+        if(this._operation.lenght < 3){
+            let firstItem = this._operation[0];
+            this.operation = [firstItem, this._lastOperator, this._lastNumber];
+        }
+        
         if(this._operation.length > 3){
             last = this._operation.pop();
+            this._lastNumber = this.getResult();
+        } else if(this._operation.lenght == 3) {
+            this._lastNumber = this.getResult(false);
         }
-        let result = eval(this._operation.join(""));
+
+        let result = this.getResult();
+        
         if(last == '%'){
             result /= 100;
             this._operation = [result];
-        }else{
+        } else {
             this._operation = [result];
             if(last){
                 this._operation.push(last);
@@ -82,9 +102,26 @@ class CalcController {
         this.setLastNumberToDisplay();
     }
 
+    //This method catch the last number when argument passed is true, or an operator if false
+    getLastItem(isOperator = true){
+        let lastItem
+        for(let i = this._operation.length - 1; i >= 0; i--){
+            if(isOperator){
+                if(this.isOperator(this._operation[i]) == isOperator){
+                    lastItem = this._operation[i];
+                    break;
+                }
+            }
+        }
+        if(!lastItem){
+            lastItem = (isOperator) ? this._lastOperator : this._lastNumber;
+        }
+        return lastItem;
+    }
+
     //Method to change the last number in the calculator display when it suffers a change
     setLastNumberToDisplay(){
-        let lastNumber;
+        let lastNumber = this.getLastItem(false);
         for(let i = this._operation.length - 1; i >= 0; i--){
             if(this.isOperator(this._operation[i])){
                 lastNumber = this._operation[i];
