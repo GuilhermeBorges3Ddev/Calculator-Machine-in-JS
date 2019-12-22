@@ -154,9 +154,15 @@ class CalcController {
         }
     }
 
-    //Simple get result of an operation
+    //Simple get result of an operation, if it's not possible shows the error method
     getResult(){
-        return eval(this._operation.join(""));
+        try {
+            return eval(this._operation.join(""));
+        } catch(e){
+            setTimeout(() => {
+                this.setError();
+            },1)
+        }    
     }
 
     //Method to validate when calculate an expression or not
