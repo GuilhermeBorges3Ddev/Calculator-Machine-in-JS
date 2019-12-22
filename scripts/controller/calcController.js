@@ -17,6 +17,24 @@ class CalcController {
         this.initKeyboard();
     }
 
+    //The method below transfer a copyed value and paste into the calculator display
+    pasteFromClipboard(){
+        document.addEventListener('paste', e => {
+            let text = e.clipboardData.getData('Text');
+            this.displayCalc = parseFloat(text);
+        });
+    }
+
+    //JS access the clipboard area to copy values of the calculator display
+    copyToClipboard(){
+        let input = document.createElement('input');
+        input.value = this.displayCalc;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("Copy");
+        input.remove();
+    }
+
     initialize(){
        this.setDisplayDateTime();
        //For each 1 second, or 1000 milliseconds, the block of code inside setInterval() is executed 
@@ -24,6 +42,7 @@ class CalcController {
             this.setDisplayDateTime();    
        }, 1000);//Another interesting function is setTimeout(), who is executed only one time after X milliseconds
        this.setLastNumberToDisplay();
+       this.pasteFromClipboard();
     }
 
     //Start keyboard capture when the calculator is open
@@ -62,6 +81,9 @@ class CalcController {
                 case '8':
                 case '9':
                     this.addOperation(parseInt(e.key));
+                break;
+                case 'c'://Copy element to calculator when user digits 'c'
+                    if(e.ctrlKey) this.copyToClipboard();
                 break;
             }
         })
