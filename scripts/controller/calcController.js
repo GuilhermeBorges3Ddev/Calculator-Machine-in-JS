@@ -3,6 +3,8 @@ class CalcController {
     constructor(){
 
         //Notation with "_" in attributes refers private attributes, works only inside the class
+        this._audio = new Audio('../click.mp3');
+        this._audioOnOff = false;
         this._lastOperator = '';
         this._lastNumber = '';
 
@@ -35,6 +37,7 @@ class CalcController {
         input.remove();
     }
 
+    //MAIN METHOD() 
     initialize(){
        this.setDisplayDateTime();
        //For each 1 second, or 1000 milliseconds, the block of code inside setInterval() is executed 
@@ -43,11 +46,30 @@ class CalcController {
        }, 1000);//Another interesting function is setTimeout(), who is executed only one time after X milliseconds
        this.setLastNumberToDisplay();
        this.pasteFromClipboard();
+       document.querySelectorAll('.btn-ac').forEach(btn => {
+            btn.addEventListener('dbclick', e => {
+                this.toggleAudio();
+            });
+       });
+    }
+
+    //Method to set on or off the audio on the buttons
+    toggleAudio(){
+       this._audioOnOff = !this._audioOnOff;
+    }
+
+    //These method uses togglesAudio() to play a sound when a calculator method is pressed
+    playAudio(){
+        if(this._audioOnOff){
+            this._audio.currentTime = 0;
+            this._audio.play();
+        }
     }
 
     //Start keyboard capture when the calculator is open
     initKeyboard(){
         document.addEventListener('keyup', e => {
+            this.playAudio();
             switch (e.key) {
                 case 'Escape':
                     this.clearAll();
@@ -246,6 +268,9 @@ class CalcController {
 
     //Switch case to be used into "AC", "CE", "%", "/", "*", "-", "+", "." and "=" buttons
     execBtn(value){
+
+        this.playAudio();
+
         switch (value) {
 
             case 'ac':
@@ -317,7 +342,7 @@ class CalcController {
            this.addEventListernerAll(btn, 'click drag', e => {
                 let textBtn = btn.className.baseVal.replace("btn-", "");
                 this.execBtn(textBtn);
-           });
+           });        
            this.addEventListernerAll(btn, 'mouseover mouseup mousedown', e => {
                 btn.style.cursor = "pointer";
            });
