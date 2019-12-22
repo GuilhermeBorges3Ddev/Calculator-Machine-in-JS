@@ -35,6 +35,8 @@ class CalcController {
     //Method created to the "ac" operation, what is the same of clear all done operations
     clearAll(){
         this._operation = [];
+        this._lastNumber = '';
+        this._lastOperator = '';
         this.setLastNumberToDisplay();
     }
 
@@ -140,8 +142,6 @@ class CalcController {
         if(isNaN(this.getLastOperation())){
             if(this.isOperator(value)) {//If the last digit is another operator, so replace
                 this.setLastOperation(value);
-            } else if(isNaN(value)) {//For dot and equal
-                
             } else {//Is a number, and its the first iteration into the array
                 this.pushOperation(value);
                 this.setLastNumberToDisplay();
@@ -151,7 +151,7 @@ class CalcController {
                 this.pushOperation(value);
             }else{
                 let newValue = this.getLastOperation().toString() + value.toString();
-                this.setLastOperation(parseInt(newValue));
+                this.setLastOperation(newValue);
                 //Updating the display when a complete number are or the last digit are modifyed 
                 this.setLastNumberToDisplay();
             }
@@ -162,6 +162,23 @@ class CalcController {
     setError(){
         this.displayCalc = "ERROR"
     }
+
+    //Mix dot with numbers in others
+    addDot(){
+        let lastOperation = this.getLastOperation();
+        //Verifying if the user is digiting two times dot, and block these action
+        if(typeof lastOperation === 'string' && lastOperation.split('').indeOf('.') > -1){
+            return;
+        }
+        //First situation, dot is the first digit
+        if(this.isOperator(lastOperation) || !lastOperation){
+            this.pushOperation('0.');
+        }else{//If the dot is inserted after a number
+            this.setLastOperation(lastOperation.toString() + '.');
+        }
+        this.setLastNumberToDisplay();
+    }
+
 
     //Switch case to be used into "AC", "CE", "%", "/", "*", "-", "+", "." and "=" buttons
     execBtn(value){
@@ -200,7 +217,7 @@ class CalcController {
             break;
 
             case 'ponto':
-                this.addOperation('.');
+                this.addDot('.');
             break;
             
             case '0':
