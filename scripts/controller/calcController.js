@@ -8,12 +8,12 @@ class CalcController {
         this._lastOperator = '';
         this._lastNumber = '';
 
-        this._locale = 'pt-BR';
-        this._currentDate;
         this._operation = []; //These array saves every operation digited by the the calculator user
+        this._locale = 'pt-BR';
         this._displayCalcEl = document.querySelector("#display");
         this._dateEl = document.querySelector("#data");
         this._timeEl = document.querySelector("#hora");
+        this._currentDate;
         this.initialize();
         this.initButtonsEvents();
         this.initKeyboard();
@@ -90,7 +90,7 @@ class CalcController {
                 break;
                 case '.':
                 case ',':
-                    this.addDot('.');
+                    this.addDot();
                 break;
                 case '0':
                 case '1':
@@ -160,9 +160,7 @@ class CalcController {
         try {
             return eval(this._operation.join(""));
         } catch(e){
-            setTimeout(() => {
-                this.setError();
-            },1)
+            setTimeout(() => this.setError(), 1);
         }    
     }
 
@@ -199,11 +197,9 @@ class CalcController {
     getLastItem(isOperator = true){
         let lastItem;
         for(let i = this._operation.length - 1; i >= 0; i--){
-            if(isOperator){
-                if(this.isOperator(this._operation[i]) == isOperator){
-                    lastItem = this._operation[i];
-                    break;
-                }
+            if(this.isOperator(this._operation[i]) === isOperator){
+                lastItem = this._operation[i];
+                break;
             }
         }
         if(!lastItem){
@@ -304,7 +300,7 @@ class CalcController {
             break;
 
             case 'ponto':
-                this.addDot('.');
+                this.addDot();
             break;
             
             case '0':
@@ -330,12 +326,6 @@ class CalcController {
         let buttons = document.querySelectorAll("#buttons > g, #parts > g");
         
         buttons.forEach((btn, index) => {
-            /*
-            Put listener in all button to the event click, but addEventListener() stands only one event per turn:
-                btn.addEventListener('click', e => {
-                    console.log(btn.className.baseVal.replace("btn-", ""));
-                });
-            */
            this.addEventListernerAll(btn, 'click drag', e => {
                 let textBtn = btn.className.baseVal.replace("btn-", "");
                 this.execBtn(textBtn);
@@ -343,7 +333,7 @@ class CalcController {
            this.addEventListernerAll(btn, 'mouseover mouseup mousedown', e => {
                 btn.style.cursor = "pointer";
            });
-        })
+        });
     }
 
     //Function created to be used into initialize() method
@@ -354,6 +344,22 @@ class CalcController {
             year: 'numeric'
         });
         this.displayTime = this.currentDate.toLocaleTimeString(this.locale);
+    }
+
+    get displayTime(){
+        return this._timeEl.innerHTML;
+    }
+
+    set displayTime(value){
+        this._timeEl.innerHTML = value;
+    }
+
+    get displayDate() {
+        return this._dateEl.innerHTML;
+    }
+
+    set displayDate(value) {
+        this._dateEl.innerHTML = value;
     }
 
     get displayCalc(){
@@ -376,18 +382,5 @@ class CalcController {
     set currentDate(value){
         this._currentDate = value;
     }
-
-    set displayTime(value){
-        this._timeEl.innerHTML = value;
-    }
-
-    get displayTime(){
-        return this._timeEl.innerHTML;
-    }
-
-    set displayDate(value){
-        this._dateEl.innerHTML = value;
-    }
-
 
 }
