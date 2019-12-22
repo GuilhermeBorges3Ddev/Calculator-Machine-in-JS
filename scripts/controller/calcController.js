@@ -14,6 +14,7 @@ class CalcController {
         this._timeEl = document.querySelector("#hora");
         this.initialize();
         this.initButtonsEvents();
+        this.initKeyboard();
     }
 
     initialize(){
@@ -23,6 +24,47 @@ class CalcController {
             this.setDisplayDateTime();    
        }, 1000);//Another interesting function is setTimeout(), who is executed only one time after X milliseconds
        this.setLastNumberToDisplay();
+    }
+
+    //Start keyboard capture when the calculator is open
+    initKeyboard(){
+        document.addEventListener('keyup', e => {
+            switch (e.key) {
+                case 'Escape':
+                    this.clearAll();
+                break;
+                case 'Backspace':
+                    this.cancelEntry();
+                break;
+                case '+':
+                case '-':
+                case '/':
+                case '*':
+                case '%':
+                    this.addOperation(e.key);
+                break;
+                case 'Enter':
+                case '=':
+                    this.calc();
+                break;
+                case '.':
+                case ',':
+                    this.addDot('.');
+                break;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    this.addOperation(parseInt(e.key));
+                break;
+            }
+        })
     }
 
     //Replacing the native method addEventListener() to another method what stand more than one event per turn
