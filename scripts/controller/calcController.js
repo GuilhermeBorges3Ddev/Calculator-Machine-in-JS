@@ -3,17 +3,17 @@ class CalcController {
     constructor(){
 
         //Notation with "_" in attributes refers private attributes, works only inside the class
-        this._audio = new Audio('../click.mp3');
+        this._audio = new Audio('click.mp3');
         this._audioOnOff = false;
         this._lastOperator = '';
         this._lastNumber = '';
 
-        this._locale = 'pt-BR';
-        this._currentDate;
         this._operation = []; //These array saves every operation digited by the the calculator user
+        this._locale = 'pt-BR';
         this._displayCalcEl = document.querySelector("#display");
         this._dateEl = document.querySelector("#data");
         this._timeEl = document.querySelector("#hora");
+        this._currentDate;
         this.initialize();
         this.initButtonsEvents();
         this.initKeyboard();
@@ -47,7 +47,7 @@ class CalcController {
        this.setLastNumberToDisplay();
        this.pasteFromClipboard();
        document.querySelectorAll('.btn-ac').forEach(btn => {
-            btn.addEventListener('dbclick', e => {
+            btn.addEventListener('dblclick', e => {
                 this.toggleAudio();
             });
        });
@@ -90,7 +90,7 @@ class CalcController {
                 break;
                 case '.':
                 case ',':
-                    this.addDot('.');
+                    this.addDot();
                 break;
                 case '0':
                 case '1':
@@ -108,7 +108,7 @@ class CalcController {
                     if(e.ctrlKey) this.copyToClipboard();
                 break;
             }
-        })
+        });
     }
 
     //Replacing the native method addEventListener() to another method what stand more than one event per turn
@@ -129,6 +129,7 @@ class CalcController {
     //Method created to the "ce" operation, what is the same of clear the last operation
     cancelEntry(){
         this._operation.pop();
+        this.setLastNumberToDisplay();
     }
 
     //Method who catch the last element of an array an see if the last member is NaN
@@ -159,27 +160,25 @@ class CalcController {
         try {
             return eval(this._operation.join(""));
         } catch(e){
-            setTimeout(() => {
-                this.setError();
-            },1)
+            setTimeout(() => this.setError(), 1);
         }    
     }
 
     //Method to validate when calculate an expression or not
     calc(){ 
         let last = '';
-        this._lastOperator = this.getLastItem(true);
+        this._lastOperator = this.getLastItem();
 
         if(this._operation.lenght < 3){
             let firstItem = this._operation[0];
-            this.operation = [firstItem, this._lastOperator, this._lastNumber];
+            this._operation = [firstItem, this._lastOperator, this._lastNumber];
         }
         
         if(this._operation.length > 3){
             last = this._operation.pop();
             this._lastNumber = this.getResult();
-        } else if(this._operation.lenght == 3) {
-            this._lastNumber = this.getResult(false);
+        } else if(this._operation.lenght === 3) {
+            this._lastNumber = this.getLastItem(false);
         }
 
         let result = this.getResult();
@@ -189,22 +188,18 @@ class CalcController {
             this._operation = [result];
         } else {
             this._operation = [result];
-            if(last){
-                this._operation.push(last);
-            }
+            if(last) this._operation.push(last);
         }
         this.setLastNumberToDisplay();
     }
 
     //This method catch the last number when argument passed is true, or an operator if false
     getLastItem(isOperator = true){
-        let lastItem
+        let lastItem;
         for(let i = this._operation.length - 1; i >= 0; i--){
-            if(isOperator){
-                if(this.isOperator(this._operation[i]) == isOperator){
-                    lastItem = this._operation[i];
-                    break;
-                }
+            if(this.isOperator(this._operation[i]) === isOperator){
+                lastItem = this._operation[i];
+                break;
             }
         }
         if(!lastItem){
@@ -216,12 +211,6 @@ class CalcController {
     //Method to change the last number in the calculator display when it suffers a change
     setLastNumberToDisplay(){
         let lastNumber = this.getLastItem(false);
-        for(let i = this._operation.length - 1; i >= 0; i--){
-            if(this.isOperator(this._operation[i])){
-                lastNumber = this._operation[i];
-                break;
-            }
-        }
         if(!lastNumber){
             lastNumber = 0;
         }
@@ -230,7 +219,6 @@ class CalcController {
 
     //These method combines a number or an operator
     addOperation(value){
-        console.log('A',value,isNaN(this.getLastOperation()))
         if(isNaN(this.getLastOperation())){
             if(this.isOperator(value)) {//If the last digit is another operator, so replace
                 this.setLastOperation(value);
@@ -312,7 +300,7 @@ class CalcController {
             break;
 
             case 'ponto':
-                this.addDot('.');
+                this.addDot();
             break;
             
             case '0':
@@ -330,7 +318,6 @@ class CalcController {
             
             default:
                 this.setError();
-            break;
         }
     }
 
@@ -339,12 +326,6 @@ class CalcController {
         let buttons = document.querySelectorAll("#buttons > g, #parts > g");
         
         buttons.forEach((btn, index) => {
-            /*
-            Put listener in all button to the event click, but addEventListener() stands only one event per turn:
-                btn.addEventListener('click', e => {
-                    console.log(btn.className.baseVal.replace("btn-", ""));
-                });
-            */
            this.addEventListernerAll(btn, 'click drag', e => {
                 let textBtn = btn.className.baseVal.replace("btn-", "");
                 this.execBtn(textBtn);
@@ -352,7 +333,7 @@ class CalcController {
            this.addEventListernerAll(btn, 'mouseover mouseup mousedown', e => {
                 btn.style.cursor = "pointer";
            });
-        })
+        });
     }
 
     //Function created to be used into initialize() method
@@ -365,6 +346,22 @@ class CalcController {
         this.displayTime = this.currentDate.toLocaleTimeString(this.locale);
     }
 
+    get displayTime(){
+        return this._timeEl.innerHTML;
+    }
+
+    set displayTime(value){
+        this._timeEl.innerHTML = value;
+    }
+
+    get displayDate() {
+        return this._dateEl.innerHTML;
+    }
+
+    set displayDate(value) {
+        this._dateEl.innerHTML = value;
+    }
+
     get displayCalc(){
         return this._displayCalcEl.innerHTML;
     }
@@ -374,7 +371,7 @@ class CalcController {
             this.setError();
             return false;
         }
-        this._displayCalcEl = value;
+        this._displayCalcEl.innerHTML = value;
     }
 
     get currentDate(){
@@ -385,18 +382,5 @@ class CalcController {
     set currentDate(value){
         this._currentDate = value;
     }
-
-    set displayTime(value){
-        this._timeEl.innerHTML = value;
-    }
-
-    get displayTime(){
-        return this._timeEl.innerHTML;
-    }
-
-    set displayDate(value){
-        this._dateEl.innerHTML = value;
-    }
-
 
 }
