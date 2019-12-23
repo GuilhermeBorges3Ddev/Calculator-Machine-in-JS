@@ -27,7 +27,7 @@ Open the following directory `/CALCULATOR-MACHINE-IN-JS/`, and execute:
 
 ##### If you've success you'll see a calculator like that:
 
-<img src="https://user-images.githubusercontent.com/19985305/71329061-d447f480-24fe-11ea-980a-458e46004d27.png" alt="Your image title" width="75%" height="25%"/>
+<img src="https://user-images.githubusercontent.com/19985305/71329061-d447f480-24fe-11ea-980a-458e46004d27.png" alt="Your image title" width="75%" height="15%"/>
 
 ::: 
 ***(c) Code and documentation**: HCode & Guilherme S. Borges*
